@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>YOLO V3 | fastpages</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="YOLO V3" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<meta property="og:description" content="An easy to use blogging platform with support for Jupyter Notebooks." />
+<link rel="canonical" href="https://sidpro-hash.github.io/Deep_Learning/2021/05/06/Object-Detection-YOLOv3.html" />
+<meta property="og:url" content="https://sidpro-hash.github.io/Deep_Learning/2021/05/06/Object-Detection-YOLOv3.html" />
+<meta property="og:site_name" content="fastpages" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2021-05-06T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"An easy to use blogging platform with support for Jupyter Notebooks.","url":"https://sidpro-hash.github.io/Deep_Learning/2021/05/06/Object-Detection-YOLOv3.html","@type":"BlogPosting","mainEntityOfPage":{"@type":"WebPage","@id":"https://sidpro-hash.github.io/Deep_Learning/2021/05/06/Object-Detection-YOLOv3.html"},"headline":"YOLO V3","dateModified":"2021-05-06T00:00:00-05:00","datePublished":"2021-05-06T00:00:00-05:00","@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/Deep_Learning/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://sidpro-hash.github.io/Deep_Learning/feed.xml" title="fastpages" /><link rel="shortcut icon" type="image/x-icon" href="/Deep_Learning/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" />
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/Deep_Learning/">fastpages</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/Deep_Learning/about/">About Me</a><a class="page-link" href="/Deep_Learning/search/">Search</a><a class="page-link" href="/Deep_Learning/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">YOLO V3</h1><p class="post-meta post-meta-title"><time class="dt-published" datetime="2021-05-06T00:00:00-05:00" itemprop="datePublished">
+        May 6, 2021
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      10 min read
+    
+</span></p>
+
+    
+
+    
+      
+        <div class="pb-5 d-flex flex-wrap flex-justify-end">
+          <div class="px-2">
+
+    <a href="https://github.com/sidpro-hash/Deep_Learning/tree/master/_notebooks/2021-05-06-Object-Detection-YOLOv3.ipynb" role="button" target="_blank">
+<img class="notebook-badge-image" src="/Deep_Learning/assets/badges/github.svg" alt="View On GitHub">
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://mybinder.org/v2/gh/sidpro-hash/Deep_Learning/master?filepath=_notebooks%2F2021-05-06-Object-Detection-YOLOv3.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Deep_Learning/assets/badges/binder.svg" alt="Open In Binder"/>
+    </a>
+</div>
+
+          <div class="px-2">
+    <a href="https://colab.research.google.com/github/sidpro-hash/Deep_Learning/blob/master/_notebooks/2021-05-06-Object-Detection-YOLOv3.ipynb" target="_blank">
+        <img class="notebook-badge-image" src="/Deep_Learning/assets/badges/colab.svg" alt="Open In Colab"/>
+    </a>
+</div>
+        </div>
+      </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <!--
+#################################################
+### THIS FILE WAS AUTOGENERATED! DO NOT EDIT! ###
+#################################################
+# file to edit: _notebooks/2021-05-06-Object-Detection-YOLOv3.ipynb
+-->
+
+<div class="container" id="notebook-container">
+        
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">time</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># We don&#39;t need to write our owan loaing function</span>
+<span class="c1"># This function returns model objects that we can use later on for prediction</span>
+
+<span class="n">net</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dnn</span><span class="o">.</span><span class="n">readNet</span><span class="p">(</span><span class="s1">&#39;/content/drive/My Drive/ObjectDetectionv2/yolov3.weights&#39;</span><span class="p">,</span><span class="s1">&#39;/content/drive/My Drive/ObjectDetectionv2/yolov3.cfg&#39;</span><span class="p">)</span>
+
+<span class="c1"># Extract the objects name from coco.name and put everything into list</span>
+<span class="n">classes</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s1">&#39;/content/drive/My Drive/ObjectDetectionv2/coco.names&#39;</span><span class="p">,</span><span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+  <span class="n">classes</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">splitlines</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">classes</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>[&#39;person&#39;, &#39;bicycle&#39;, &#39;car&#39;, &#39;motorbike&#39;, &#39;aeroplane&#39;, &#39;bus&#39;, &#39;train&#39;, &#39;truck&#39;, &#39;boat&#39;, &#39;traffic light&#39;, &#39;fire hydrant&#39;, &#39;stop sign&#39;, &#39;parking meter&#39;, &#39;bench&#39;, &#39;bird&#39;, &#39;cat&#39;, &#39;dog&#39;, &#39;horse&#39;, &#39;sheep&#39;, &#39;cow&#39;, &#39;elephant&#39;, &#39;bear&#39;, &#39;zebra&#39;, &#39;giraffe&#39;, &#39;backpack&#39;, &#39;umbrella&#39;, &#39;handbag&#39;, &#39;tie&#39;, &#39;suitcase&#39;, &#39;frisbee&#39;, &#39;skis&#39;, &#39;snowboard&#39;, &#39;sports ball&#39;, &#39;kite&#39;, &#39;baseball bat&#39;, &#39;baseball glove&#39;, &#39;skateboard&#39;, &#39;surfboard&#39;, &#39;tennis racket&#39;, &#39;bottle&#39;, &#39;wine glass&#39;, &#39;cup&#39;, &#39;fork&#39;, &#39;knife&#39;, &#39;spoon&#39;, &#39;bowl&#39;, &#39;banana&#39;, &#39;apple&#39;, &#39;sandwich&#39;, &#39;orange&#39;, &#39;broccoli&#39;, &#39;carrot&#39;, &#39;hot dog&#39;, &#39;pizza&#39;, &#39;donut&#39;, &#39;cake&#39;, &#39;chair&#39;, &#39;sofa&#39;, &#39;pottedplant&#39;, &#39;bed&#39;, &#39;diningtable&#39;, &#39;toilet&#39;, &#39;tvmonitor&#39;, &#39;laptop&#39;, &#39;mouse&#39;, &#39;remote&#39;, &#39;keyboard&#39;, &#39;cell phone&#39;, &#39;microwave&#39;, &#39;oven&#39;, &#39;toaster&#39;, &#39;sink&#39;, &#39;refrigerator&#39;, &#39;book&#39;, &#39;clock&#39;, &#39;vase&#39;, &#39;scissors&#39;, &#39;teddy bear&#39;, &#39;hair drier&#39;, &#39;toothbrush&#39;]
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">google.colab.patches</span> <span class="kn">import</span> <span class="n">cv2_imshow</span>
+
+<span class="n">cap</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">VideoCapture</span><span class="p">(</span><span class="s1">&#39;/content/drive/My Drive/ObjectDetectionv2/Road_traffic_video2.mp4&#39;</span><span class="p">)</span> <span class="c1"># from video</span>
+<span class="c1">#cap = cv2.VideoCapture(0) # from webcam</span>
+<span class="c1">#img = cv2.imread(&#39;/content/drive/My Drive/ObjectDetectionv2/restaruant2.jpg&#39;) # from image</span>
+<span class="n">font</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">FONT_HERSHEY_PLAIN</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">classes</span><span class="p">),</span> <span class="mi">3</span><span class="p">))</span>
+<span class="c1">#img = cv2.resize(img, None,fx=0.4, fy=0.4)</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+<span class="n">img_id</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+  <span class="n">_</span><span class="p">,</span> <span class="n">img</span> <span class="o">=</span> <span class="n">cap</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+  <span class="n">img_id</span> <span class="o">+=</span><span class="mi">1</span>
+  <span class="n">height</span><span class="p">,</span> <span class="n">width</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">img</span><span class="o">.</span><span class="n">shape</span>
+  <span class="c1"># we need to resize the image in a square 416x416 that can be fit into the Yolo3</span>
+  <span class="c1"># and also we normalize it by dividing the pixel value by 255</span>
+  <span class="c1"># here we use dimension 32xX here X=13 so the input size w,h=(416,416) and it&#39;s work better the bigger X is.</span>
+
+  <span class="n">blob</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dnn</span><span class="o">.</span><span class="n">blobFromImage</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="mi">1</span><span class="o">/</span><span class="mi">255</span><span class="p">,(</span><span class="mi">320</span><span class="p">,</span><span class="mi">320</span><span class="p">),(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="n">swapRB</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">crop</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+  <span class="c1"># first image,second normalization,third dimension,fourth no any means of substraction</span>
+  <span class="c1"># fifth swapRb = true that convert BGR to RGB,sixth no croping</span>
+
+  <span class="c1"># passing this blob into our model inside a net</span>
+  <span class="n">net</span><span class="o">.</span><span class="n">setInput</span><span class="p">(</span><span class="n">blob</span><span class="p">)</span>
+
+  <span class="c1"># get output layersname [&#39;yolo_82&#39;, &#39;yolo_94&#39;, &#39;yolo_106&#39;]</span>
+  <span class="n">output_layers_names</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">getUnconnectedOutLayersNames</span><span class="p">()</span> 
+
+  <span class="n">output_all</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">getLayerNames</span><span class="p">()</span> <span class="c1"># to get names of all layers</span>
+  <span class="c1"># print(output_layers_names)</span>
+  <span class="c1"># print(output_all)</span>
+
+  <span class="c1"># forward propogation</span>
+  <span class="c1"># passing output layers names to get output at that layers</span>
+  <span class="n">layersOutputs</span> <span class="o">=</span> <span class="n">net</span><span class="o">.</span><span class="n">forward</span><span class="p">(</span><span class="n">output_layers_names</span><span class="p">)</span>
+  <span class="c1"># we need to extract the bounding boxes</span>
+  <span class="c1"># confidences and the predicted classes</span>
+  <span class="n">boxes</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">confidences</span> <span class="o">=</span> <span class="p">[]</span>
+  <span class="n">class_ids</span> <span class="o">=</span> <span class="p">[]</span>
+
+  <span class="c1">#print(layersOutputs)</span>
+
+  <span class="c1">#3 boxes with box co-ordinates,confidence score,class score</span>
+  <span class="k">for</span> <span class="n">output</span> <span class="ow">in</span> <span class="n">layersOutputs</span><span class="p">:</span>
+    <span class="c1"># 4 box co-ordinates + 1 confidence score + 80 class score = 85</span>
+    <span class="k">for</span> <span class="n">detection</span> <span class="ow">in</span> <span class="n">output</span><span class="p">:</span>
+      <span class="n">scores</span> <span class="o">=</span> <span class="n">detection</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="c1"># store 80 class predeictions</span>
+      <span class="n">class_id</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmax</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span> <span class="c1">#extract highest scores indexes</span>
+      <span class="n">confidence</span> <span class="o">=</span> <span class="n">scores</span><span class="p">[</span><span class="n">class_id</span><span class="p">]</span> 
+
+      <span class="k">if</span> <span class="n">confidence</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span>
+        <span class="c1"># Object detected</span>
+        <span class="c1"># we have normalized img by scalefactor 1/255 </span>
+        <span class="c1"># so co-ordinates are appropriate to that img</span>
+        <span class="c1"># to get original, denormalize by multiplying it&#39;s original width,height </span>
+        <span class="n">center_x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">detection</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">width</span><span class="p">)</span>
+        <span class="n">center_y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">detection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">detection</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">*</span> <span class="n">width</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">detection</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="n">height</span><span class="p">)</span>
+        
+        <span class="c1"># Rectangle coordinates</span>
+        <span class="c1"># extract the upper left corners positions in order to present them with use of opencv</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_x</span> <span class="o">-</span> <span class="n">w</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">center_y</span> <span class="o">-</span> <span class="n">h</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        
+        <span class="c1"># append everything to draw boxes</span>
+        <span class="n">boxes</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span><span class="p">])</span>
+        <span class="n">confidences</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">confidence</span><span class="p">))</span>
+        <span class="n">class_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">class_id</span><span class="p">)</span>
+
+  <span class="c1">#print(len(boxes))</span>
+  <span class="c1">#third parameter is set under the confidence,last is NMS</span>
+  <span class="n">indexes</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">dnn</span><span class="o">.</span><span class="n">NMSBoxes</span><span class="p">(</span><span class="n">boxes</span><span class="p">,</span> <span class="n">confidences</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.4</span><span class="p">)</span>
+  <span class="c1">#print(indexes)</span>
+
+
+
+  <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">indexes</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indexes</span><span class="o">.</span><span class="n">flatten</span><span class="p">():</span>
+      <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">w</span><span class="p">,</span> <span class="n">h</span> <span class="o">=</span> <span class="n">boxes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+      <span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">classes</span><span class="p">[</span><span class="n">class_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+      <span class="n">confidence</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">confidences</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="mi">2</span><span class="p">))</span>
+      <span class="n">color</span> <span class="o">=</span> <span class="n">colors</span><span class="p">[</span><span class="n">class_ids</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+      <span class="n">cv2</span><span class="o">.</span><span class="n">rectangle</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">),</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">w</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="n">h</span><span class="p">),</span> <span class="n">color</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+      <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">img</span><span class="p">,</span> <span class="n">label</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">confidence</span><span class="p">,</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">+</span> <span class="mi">50</span><span class="p">),</span> <span class="n">font</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+  <span class="c1"># cv2.imshow(&#39;Image&#39;,img)  DisabledFunctionError: cv2.imshow() is disabled in Colab, </span>
+  <span class="c1"># because it causes Jupyter sessions to crash;</span>
+  <span class="n">elapsed_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">start_time</span>
+  <span class="n">fps</span> <span class="o">=</span> <span class="n">img_id</span><span class="o">/</span><span class="n">elapsed_time</span>
+  <span class="n">cv2</span><span class="o">.</span><span class="n">putText</span><span class="p">(</span><span class="n">img</span><span class="p">,</span><span class="s2">&quot;FPS: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">fps</span><span class="p">,</span><span class="mi">2</span><span class="p">)),(</span><span class="mi">10</span><span class="p">,</span><span class="mi">30</span><span class="p">),</span><span class="n">font</span><span class="p">,</span><span class="mi">3</span><span class="p">,(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span>
+  <span class="n">cv2_imshow</span><span class="p">(</span><span class="n">img</span><span class="p">)</span>
+  <span class="n">key</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">waitKey</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">key</span><span class="o">==</span><span class="mi">27</span><span class="p">:</span>
+    <span class="k">break</span>
+
+<span class="n">cv2</span><span class="o">.</span><span class="n">release</span><span class="p">()</span>
+<span class="n">cv2</span><span class="o">.</span><span class="n">destroyAllWindows</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+    
+
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Feature-Extractor">Feature Extractor<a class="anchor-link" href="#Feature-Extractor"> </a></h1><p>The previous YOLO versions have used Darknet-19 (a custom neural network architecture written in C and CUDA) as a feature extractor which was of 19 layers as the name suggests. YOLO v2 added 11 more layers to Darknet-19 making it a total 30-layer architecture. Still, the algorithm faced a challenge while detecting small objects due to downsampling the input image and losing fine-grained features.</p>
+<p>YOLO V3 came up with a better architecture where the feature extractor used was a hybrid of YOLO v2, Darknet-53 (a network trained on the ImageNet), and Residual networks(ResNet). The network uses 53 convolution layers (hence the name Darknet-53) where the network is built with <strong>consecutive 3x3 and 1x1 convolution layers</strong> followed by a <strong>skip connection</strong> (introduced by ResNet to help the activations propagate through deeper layers without gradient diminishing).</p>
+<p>The 53 layers of the darknet are further stacked with 53 more layers for the detection head, making YOLO v3 a total of a <strong>106 layer fully convolutional underlying architecture</strong>. thus leading to a large architecture, though making it a bit slower as compared to YOLO v2, but enhancing the accuracy at the same time.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For visualizing how the multi-scale extractor would look like, I’m taking an example of a 416x416 image. A stride of a layer is defined as the ratio by which it downsamples the input, and hence the three scales in our case would be 52x52, 26x26, and 13x13 where 13x13 would be used for larger objects and 26x26 and 52x52 would be used for medium and smaller objects.</p>
+<h1 id="Multi-scale-Detector">Multi-scale Detector<a class="anchor-link" href="#Multi-scale-Detector"> </a></h1><p>An important feature of the YOLO v3 model is its multi-scale detector, which means that the detection for an eventual output of a fully convolutional network is done by applying 1x1 detection kernels on feature maps of three different sizes at three different places. The shape of the kernel is <strong>1x1x(B*(5+C))</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Complete-Network-Architecture">Complete Network Architecture<a class="anchor-link" href="#Complete-Network-Architecture"> </a></h1><p>diagram that beautifully explains the complete architecture of YOLO v3 (Combining both, the extractor and the detector).</p>
+<p><img src="https://drive.google.com/uc?export=view&amp;id=1NT0UwnMtV9of_NNB6OlmI2t05R5hPgF0" alt="" /></p>
+<p>YOLO v3 makes prediction at three scales, which are precisely given by downsampling the dimensions of 
+the input image by 32, 16 and 8 respectively.</p>
+<p>The first detection is made by the 82nd layer. For the first 81 layers, 
+the image is down sampled by the network, such that the 81st layer has a stride of 32. 
+If we have an image of 416 x 416, the resultant feature map would be of size 13 x 13. 
+One detection is made here using the 1 x 1 detection kernel, giving us a detection feature map of 13 x 13 x 255.</p>
+<p>Then, the feature map from layer 79 is subjected to a few convolutional layers before being up sampled by 2x to dimensions of 26 x 26. This feature map is then depth concatenated with the feature map from layer 61. Then the combined feature maps is again subjected a few 1 x 1 convolutional layers to fuse the features from the earlier layer (61). Then, the second detection is made by the 94th layer, yielding a detection feature map of 26 x 26 x 255.</p>
+<p>A similar procedure is followed again, where the feature map from layer 91 is subjected to few convolutional layers before being depth concatenated with a feature map from layer 36. Like before, a few 1 x 1 convolutional layers follow to fuse the information from the previous layer (36). We make the final of the 3 at 106th layer, yielding feature map of size 52 x 52 x 255.</p>
+<p>The multi-scale detector is used to ensure that the small objects are also being detected unlike in YOLO v2, where there was constant criticism regarding the same. Upsampled layers concatenated with the previous layers end up preserving the fine-grained features which help in detecting small objects.</p>
+<p><strong>The details of how this kernel looks in our model is described below</strong></p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Working-of-YOLO-v3">Working of YOLO v3<a class="anchor-link" href="#Working-of-YOLO-v3"> </a></h1><p>The YOLO v3 network aims to predict <strong>bounding boxes</strong> (region of interest of the candidate object) of each object along with the <strong>probability</strong> of the class which the object belongs to.</p>
+<p>For this, the model divides every input image into an SxS grid of cells and each grid predicts B bounding boxes and C class probabilities of the objects whose centers fall inside the grid cells. The paper states that each bounding box may specialize in detecting a certain kind of object.</p>
+<p>Bounding boxes <strong>"B"</strong> is associated with the number of <strong>anchors</strong> being used. Each bounding box has <strong>5+C</strong> attributes, where <strong>'5'</strong> refers to the five bounding box attributes (eg: center coordinates(bx, by), height(bh), width(bw), and confidence score) and <strong>C</strong> is the number of classes.</p>
+<p>Our output from passing this image into a forward pass convolution network is a 3-D tensor because we are working on an SxS image. The output looks like <strong>[S, S, B*(5+C)]</strong>.</p>
+<p>Let’s just understand this better using an example.</p>
+<p><img src="https://drive.google.com/uc?export=view&amp;id=1KJW9Wws-v686E6HTjL_V-oITPk14WFgX" alt="" /></p>
+<p>In the above example, we see that our input image is divided into 13 x 13 grid cells. Now, let us understand what happens with taking just a single grid cell.</p>
+<p>Due to the multi-scale detection feature of YOLO v3, a detection kernel of three different sizes is applied at three different places, hence the 3 boxes(i.e B=3). YOLO v3 was trained on the COCO dataset with 80 object categories or classes, hence C=80.</p>
+<p>Thus, the output is a 3-D tensor as mentioned earlier with dimensions (13, 13, 3*(80+5)).</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Anchor-Boxes">Anchor Boxes<a class="anchor-link" href="#Anchor-Boxes"> </a></h1><p>In the earlier years for detecting an object, scientists used the concept of the sliding window and ran an image classification algorithm on each window. Soon they realized this didn’t make sense and was very inefficient so they moved on to using ConvNets and running the entire image in a single shot. Since the ConvNet outputs square matrices of feature values (i.e something like a 13x13 or 26x26 in case of YOLO) the concept of <strong>"grid"</strong> came into the picture. We define the square feature matrix as a grid but the real problem came when the objects to detect were not in square shapes. These objects could be in any shape (mostly rectangular). Thus, <strong>anchor boxes</strong> were started being used.</p>
+<p>Anchor boxes are pre-defined boxes that have an aspect ratio set. These aspect ratios are defined beforehand even before training by running a K-means clustering on the entire dataset. These anchor boxes anchor to the grid cells and share the same centroid. YOLO v3 uses <strong>3 anchor boxes for every detection scale</strong>, which makes it a total of <strong>9 anchor boxes</strong>.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="Non-Maximum-Suppression">Non-Maximum Suppression<a class="anchor-link" href="#Non-Maximum-Suppression"> </a></h1><p>There is a chance that after the single forward pass, the output predicted would have multiple bounding boxes for the same object since the centroid would be the same, but we only need one bounding box which is best suited for all the.</p>
+<p>For this, we can use a method called non-maxim suppression (NMS) which basically cleans up after these detections. We can define a certain threshold that would act as a constraint for this NMS method where it would ignore all the other bounding boxes whose confidence is below the threshold mentioned, thus eliminating a few. But this wouldn’t eliminate all, so the next step in the NMS would be implemented, i.e to arrange all the confidences of the bounding boxes in descending order and choose the one with the highest score as the most appropriate one for the object. Then we find all the other boxes with high Intersection over union (IOU) with the bounding box with maximum confidence and eliminate all those as well.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h1 id="References:"><strong>References:</strong><a class="anchor-link" href="#References:"> </a></h1><p><a href="https://machinelearningmastery.com/object-recognition-with-deep-learning/">A Gentle Introduction to Object Recognition With Deep Learning</a></p>
+<p><a href="http://christopher5106.github.io/object/detectors/2017/08/10/bounding-box-object-detectors-understanding-yolo.html">Bounding box object detectors: understanding YOLO, You Look Only Once</a></p>
+<p><a href="https://towardsdatascience.com/yolo-v3-object-detection-53fb7d3bfe6b">What’s new in YOLO v3?</a></p>
+<p><a href="https://towardsdatascience.com/digging-deep-into-yolo-v3-a-hands-on-guide-part-1-78681f2c7e29">Digging deep into YOLO V3 - A hands-on guide</a></p>
+<p><a href="https://towardsdatascience.com/dive-really-deep-into-yolo-v3-a-beginners-guide-9e3d2666280e">Dive Really Deep into YOLO v3: A Beginner’s Guide</a></p>
+<p><a href="https://pjreddie.com/media/files/papers/yolo_1.pdf">YOLO_v1</a></p>
+<p><a href="https://pjreddie.com/media/files/papers/YOLO9000.pdf">YOLO_v2</a></p>
+<p><a href="https://pjreddie.com/media/files/papers/YOLOv3.pdf">YOLO_v3</a></p>
+<p>If you need help, there’re plenty of excellent resources like <a href="https://www.udacity.com/course/computer-vision-nanodegree--nd891">Udacity Computer Vision Nanodegree</a>, <strong><a href="https://www.coursera.org/specializations/deep-learning">Cousera Deep Learning Specialization</a></strong> and <a href="http://cs231n.stanford.edu/">Stanford CS231n</a>.</p>
+
+</div>
+</div>
+</div>
+    
+    
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="kn">from</span> <span class="nn">google.colab</span> <span class="kn">import</span> <span class="n">drive</span>
+<span class="n">drive</span><span class="o">.</span><span class="n">mount</span><span class="p">(</span><span class="s1">&#39;/content/drive&#39;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+<div class="output_area">
+
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>Mounted at /content/drive
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+    
+
+</div>
+
+
+
+  </div><a class="u-url" href="/Deep_Learning/2021/05/06/Object-Detection-YOLOv3.html" hidden></a>
+</article>
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/Deep_Learning/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/Deep_Learning/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/Deep_Learning/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>An easy to use blogging platform with support for Jupyter Notebooks.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/fastai" title="fastai"><svg class="svg-icon grey"><use xlink:href="/Deep_Learning/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/fastdotai" title="fastdotai"><svg class="svg-icon grey"><use xlink:href="/Deep_Learning/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
